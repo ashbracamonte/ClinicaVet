@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Clínica Veterinaria</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-sm-8 col-xs-12 login-container">
+        <div class="login-form">
+          <div class="login-header">
+            <img src="img/logo.png" alt="Logo de la Clínica Veterinaria" width="150">
+            <p>Iniciar sesión</p>
+          </div>
+          <div>
+            <div class="form-group">
+              <input type="email" class="form-control" id="mail" placeholder=" ">
+              <label class="form-label">Correo</label>
+            </div>
+            <br>
+            <div class="form-group">
+              <input type="password" class="form-control" id="pass" placeholder=" ">
+              <label class="form-label">Contraseña</label>
+            </div>
+            <div class="form-group form-check d-flex align-items-center">
+              <input type="checkbox" class="form-check-input mr-2" id="recordar">
+              <label class="form-check-label checkbox-label" for="recordar">Recuérdame</label>
+            </div>
+            <br>
+            <button onclick="login()" name="enviar" class="btn btn-custom btn-block btn-rounded">Iniciar sesión</button>
+            <br>
+            <div class="text-center mt-3">
+              <p>¿No tienes cuenta? <a href="signin.html">Crear cuenta</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+
+    function login() {
+      var mail = document.getElementById("mail").value;
+      var pass = document.getElementById("pass").value;
+
+      $.ajax({
+        // la URL para la petición
+        url: 'http://localhost/ClinicaVet/www/php/login.php',
+
+        // la información a enviar
+        // (también es posible utilizar una cadena de datos)
+        data: { mail: mail, pass: pass },
+
+        // especifica si será una petición POST o GETs
+        method: 'GET',
+
+        // el tipo de información que se espera de respuesta
+        dataType: 'json',
+
+        // código a ejecutar si la petición es satisfactoria;
+        // la respuesta es pasada como argumento a la función
+
+        //comando de jquery para imprimer en HTML
+        success: function (response) {
+          console.log(response);
+
+          if(response.result){
+            localStorage.setItem('user', JSON.stringify(response.data));
+            window.location.href = "/ClinicaVet/www/inicio.html";
+          }
+
+        },
+
+        // código a ejecutar si la petición falla;
+        // son pasados como argumentos a la función
+        // el objeto de la petición en crudo y código de estatus de la petición
+        error: function (xhr, status) {
+          alert('Disculpe, existió un problema');
+        },
+
+        // código a ejecutar sin importar si la petición falló o no
+        complete: function (xhr, status) {
+          //    alert('Petición realizada');
+        }
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>

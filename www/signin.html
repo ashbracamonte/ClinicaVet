@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Clínica Veterinaria</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-sm-8 col-xs-12 register-container">
+        <div class="register-form">
+          <!-- Agregar el logo aquí -->
+          <div class="register-header">
+            <img src="img/logo.png" alt="Logo de la Clínica Veterinaria" width="150">
+            <p>Registrarse</p>
+          </div>
+          <div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="nombres" placeholder=" ">
+              <label class="form-label" for="nombres">Nombre(s):</label>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="apellidos" placeholder=" ">
+              <label class="form-label" for="apellidos">Apellido(s):</label>
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-control" id="mail" placeholder=" ">
+              <label class="form-label" for="correo">Correo:</label>
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" id="pass" placeholder=" ">
+              <label class="form-label" for="contrasena">Contraseña:</label>
+            </div>
+            <div class="form-group">
+              <input type="tel" class="form-control" id="tel" placeholder=" ">
+              <label class="form-label" for="telefono">Número telefónico:</label>
+            </div>
+            <button onclick="registrarse()" id="registro_enviar"
+              class="btn btn-custom btn-block btn-rounded">Registrarse</button>
+
+            <div class="form-group form-check d-flex align-items-center">
+              <input type="checkbox" class="form-check-input mr-2" id="terminos">
+              <label class="form-check-label checkbox-label" for="terminos">Acepto términos de privacidad</label>
+            </div>
+            <br>
+            <br>
+            <div class="text-center mt-3">
+              <p>¿Tienes una cuenta? <a href="index.html">Iniciar sesión</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function registrarse() {
+      let nombre = document.getElementById("nombres").value;
+      let apellido = document.getElementById("apellidos").value;
+      let correo = document.getElementById("mail").value;
+      let contrasena = document.getElementById("pass").value;
+      let telefono = document.getElementById("tel").value;
+      let terminos = document.getElementById("terminos").checked;
+
+      const user = {
+        name: nombre,
+        lastname: apellido,
+        mail: correo,
+        pass: contrasena,
+        phone: telefono
+      }
+
+      if (terminos == false) {
+        alert("Por favor acepte los términos de privacidad");
+      }
+      else if (nombre == "" || apellido == "" || correo == "" || contrasena == "" || telefono == "") {
+        alert("Por favor llene todos los campos");
+      } else {
+        $.ajax({
+          // la URL para la petición
+          url: 'http://localhost/ClinicaVet/www/php/registro.php',
+
+          // la información a enviar
+          // (también es posible utilizar una cadena de datos)
+          data: { data: JSON.stringify(user) },
+
+          // especifica si será una petición POST o GETs
+          method: 'POST',
+
+          // el tipo de información que se espera de respuesta
+          dataType: 'html',
+
+          //comando de jquery para imprimer en HTML
+          success: function (response) {
+            respuesta = JSON.parse(response);
+            console.log(respuesta);
+
+            if (respuesta.result) {
+              localStorage.setItem('user', JSON.stringify(respuesta.result));
+              window.location.href = "http://localhost/ClinicaVet/www/inicio.html";
+            }
+
+            alert(respuesta.msg);
+
+          },
+
+          // código a ejecutar si la petición falla;
+          // son pasados como argumentos a la función
+          // el objeto de la petición en crudo y código de estatus de la petición
+          error: function (xhr, status) {
+            alert('Disculpe, existió un problema' + xhr + status);
+          },
+
+          // código a ejecutar sin importar si la petición falló o no
+          complete: function (xhr, status) {
+            //    alert('Petición realizada');
+          }
+        });
+      }
+    }
+  </script>
+</body>
+
+</html>

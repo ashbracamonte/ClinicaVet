@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Mascota - Clínica Veterinaria</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            window.location.href = "/ClinicaVet/www/";
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container container d-flex justify-content-center align-items-center min-vh-100"">
+     <div class="col-md-6 col-sm-8 col-xs-12 inicio-container text-center">
+            <div class="inicio-header textopadding">
+
+                <h2>Mascotas</h2>
+            </div>
+            <div class=" text-center mb-4">
+                <button type="button" class="btn btn-primary btn-rounded btn-medium" data-toggle="modal"
+                    data-target="#addPetModal">
+                    Agregar mascota
+                </button>
+            </div>
+            <div class="table-responsive custom-padding-bottom">
+                <table class="table table-hover custom-table">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Fecha de Nacimiento</th>
+                            <th>Género</th>
+                        </tr>
+                    </thead>
+                    <tbody id="petTableBody">
+                        <!-- Mascotas se agregarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="navbar navbar-light bg-custom">
+                <div class="container-fluid d-flex justify-content-around">
+                    <a class="nav-link" href="#link1">
+                        <img src="img/book.svg" alt="Icono 1" width="24">
+                    </a>
+                    <a class="nav-link" href="inicio.html">
+                        <img src="img/home.svg" alt="Icono 2" width="40">
+                    </a>
+                    <a class="nav-link" href="perfil.html">
+                        <img src="img/user.svg" alt="Icono 3" width="24">
+                    </a>
+                </div>
+            </nav>
+
+         </div>
+
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="addPetModal" tabindex="-1" role="dialog" aria-labelledby="addPetModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPetModalLabel">Nueva Mascota</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="petForm">
+                        <div class="form-group text-center">
+                            <img id="imgPreview" class="img-preview rounded-circle" src="#" alt="Imagen de la mascota">
+                            <input type="file" class="form-control-file" id="petImage" accept="image/*"
+                                onchange="previewImage(event)">
+                        </div>
+                        <div class="form-group text-left">
+                            <input type="text" class="form-control" id="petName" placeholder="Nombre de la mascota"
+                                required>
+                            <label for="petName" class="form-label">Nombre de la mascota</label>
+                        </div>
+                        <div class="form-group text-left">
+                            <input type="date" class="form-control" id="petBirthdate" required>
+                            <label for="petBirthdate" class="form-label">Fecha de nacimiento</label>
+                        </div>
+                        <div class="form-group text-left">
+                            <select id="petGender" class="custom-select form-control" required>
+                                <option value="" disabled selected>Seleccione el género</option>
+                                <option value="male">Macho</option>
+                                <option value="female">Hembra</option>
+                            </select>
+                            <label for="petGender" class="form-label">Género</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-rounded btn-medium">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        let input = $('input[type=file]');
+
+        // Escucha el evento change
+        input.on('change', function () {
+            let file = this.files[0];
+            let reader = new FileReader();
+
+            // Valida que el archivo sea una imagen
+            if (!file.type.startsWith('image/')) {
+                alert("Por favor, sube solo imágenes.");
+                input.val(null);
+                return;
+            }
+
+            // Cuando se ha leído el archivo
+            reader.onloadend = function () {
+                // Muestra la previsualización de la imagen
+                $('#imgPreview').attr('src', reader.result);
+
+                // Aquí puedes añadir el código para subir la imagen
+                // Por ejemplo, podrías hacer una petición HTTP a un servidor
+
+                // Limpia el input
+                input.val(null);
+            }
+
+            // Lee el archivo como URL
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                $('#imgPreview').attr('src', "");
+            }
+        });
+
+        document.getElementById("petForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            let nombre = $("#petName").val();
+            let cumple = $("#petBirthdate").val();
+            let userid = user.id;
+            let genero = $("#petGender").val();
+
+            const pet = {
+                name: nombre,
+                birth: cumple,
+                gender: genero,
+                userid: userid
+            }
+
+            if (nombre == "" || cumple == "" || genero == "") {
+                alert("Por favor llene todos los campos");
+            } else {
+                $.ajax({
+                    // la URL para la petición
+                    url: 'http://localhost/ClinicaVet/www/php/pet.php',
+
+                    // la información a enviar
+                    // (también es posible utilizar una cadena de datos)
+                    data: { data: JSON.stringify(pet) },
+
+                    // especifica si será una petición POST o GET
+                    method: 'POST',
+
+                    // el tipo de información que se espera de respuesta
+                    dataType: 'json',
+
+                    //comando de jquery para imprimer en HTML
+                    success: function (response) {
+                        respuesta = response;
+                        console.log(respuesta);
+
+                        // Agregar mascota a la tabla
+                        let newRow = `<tr>
+                            <td><img src="${$('#imgPreview').attr('src')}" alt="Imagen de la mascota" class="img-thumbnail" width="50"></td>
+                            <td>${nombre}</td>
+                            <td>${cumple}</td>
+                            <td>${genero === 'male' ? 'Macho' : 'Hembra'}</td>
+                        </tr>`;
+                        $("#petTableBody").append(newRow);
+
+                        alert(respuesta.msg);
+                        $('#addPetModal').modal('hide');
+                    },
+
+                    error: function (xhr, status) {
+                        console.log(xhr.responseText);
+                        alert('Disculpe, existió un problema');
+                    }
+                });
+            }
+        });
+
+    </script>
+</body>
+
+</html>

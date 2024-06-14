@@ -1,0 +1,221 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.login-container, .register-container {
+  margin-top: 20px;
+}
+
+.login-form, .register-form, .inicio-container, .profile-container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.login-header, .register-header, .inicio-header, .profile-header {
+  text-align: center;
+  color: #13138c;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.inicio-header h2 {
+  color: #13138c;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.form-control {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #adb5bd;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 10px 0;
+  height: calc(2.75rem + 2px); /* Aumentado para evitar corte de texto */
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #13138c;
+  box-shadow: none;
+}
+
+.form-control:focus ~ .form-label {
+  color: #13138c;
+}
+
+.form-label {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  pointer-events: none;
+  color: #6c757d;
+  transition: 0.2s;
+}
+
+.form-control:focus ~ .form-label,
+.form-control:not(:placeholder-shown) ~ .form-label {
+  top: -10px;
+  font-size: 12px;
+}
+
+.checkbox-label {
+  color: #6c757d;
+  font-size: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.checkbox-label:hover {
+  color: #13138c;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #13138c;
+  border-color: #13138c;
+}
+
+.btn-rounded {
+  border-radius: 20px;
+}
+
+.btn-custom {
+  background-color: #dbd9d9;
+  color: #13138c;
+  border-color: #dbd9d9;
+}
+
+.btn-custom:hover {
+  background-color: #13138c;
+  color: #ffffff;
+  border-color: #13138c;
+}
+
+.btn-primary {
+  background-color: #13138c;
+  border-color: #13138c;
+}
+
+.btn-primary:hover {
+  background-color: #0f106c;
+  border-color: #0f106c;
+}
+
+.bg-custom {
+  border-top: 2px solid #adb5bd;
+  background-color: transparent;
+}
+
+.navbar .nav-link {
+  color: #13138c;
+  font-size: 24px;
+}
+
+.navbar .nav-link:hover {
+  color: #13138c;
+}
+
+.inicio-header {
+  text-align: center;
+  color: #13138c;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.inicio-header h2 {
+  color: #13138c;
+}
+
+.btn-circle {
+  text-decoration: none;
+}
+
+.circle-button {
+  width: 100px;
+  height: 100px;
+  background-color: #13138c;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.circle-button:hover {
+  background-color: #0f106c;
+}
+
+.custom-margin-bottom {
+  margin-bottom: 150px; /* Ajusta el valor según sea necesario */
+}
+
+.textopadding {
+  padding: 30px;
+}
+
+.profile-form img {
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.profile-buttons .btn {
+  background-color: #13138c;
+  color: #ffffff;
+  border-radius: 20px;
+  margin: 10px;
+  padding: 10px 20px;
+}
+
+.profile-buttons .btn:hover {
+  background-color: #0f106c;
+  border-color: #0f106c;
+}
+
+.navbar img {
+  border-radius: 0; /* Elimina el redondeo de los íconos */
+}
+
+/* Estilos adicionales para los selectores */
+.custom-select {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #adb5bd;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 10px 0;
+  height: calc(2.75rem + 2px); /* Aumentado para evitar corte de texto */
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.custom-select:focus {
+  outline: none;
+  border-color: #13138c;
+  box-shadow: none;
+}
+
+.custom-select option {
+  color: #495057; /* Para asegurar que el texto de las opciones sea visible */
+}
+
+.custom-select:focus ~ .form-label {
+  color: #13138c;
+}
+
+.custom-padding-bottom {
+  padding-bottom: 100px;
+}

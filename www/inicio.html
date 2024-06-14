@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio - Clínica Veterinaria</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script>
+    let user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      window.location.href = "/";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-sm-8 col-xs-12 inicio-container text-center">
+      <div class="inicio-header textopadding">
+        <!-- Agregar el logo aquí -->
+        <br>
+        <img src="img/logo.png" alt="Logo de la Clínica Veterinaria" width="150">
+        <h2>Bienvenido, <span id="nombrePersona"></span></h2>
+      </div>
+      <div class="custom-margin-bottom">
+
+      </div>
+      <div class="inicio-buttons d-flex justify-content-around my-4 custom-margin-bottom">
+        <a href="mascotas.html" class="btn-circle">
+          <div class="circle-button">Mascotas</div>
+        </a>
+        <a href="citas.html" class="btn-circle">
+          <div class="circle-button">Citas</div>
+        </a>
+        <a href="historial.html" class="btn-circle">
+          <div class="circle-button">Historial Médico</div>
+        </a>
+      </div>
+      <div class="custom-margin-bottom">
+
+      </div>
+      <nav class="navbar navbar-light bg-custom ">
+        <div class="container-fluid d-flex justify-content-around">
+          <!-- Poner los links de las imágenes aquí -->
+          <a class="nav-link" href="#link1">
+            <img src="img/book.svg" alt="Icono 1" width="24">
+          </a>
+          <a class="nav-link" href="inicio.html">
+            <img src="img/home.svg" alt="Icono 2" width="40">
+          </a>
+          <a class="nav-link" href="perfil.html">
+            <img src="img/user.svg" alt="Icono 3" width="24">
+          </a>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $("#nombrePersona").html(user.name + " " + user.lastname);
+    });
+  </script>
+</body>
+
+</html>
