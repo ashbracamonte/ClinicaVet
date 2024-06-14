@@ -15,15 +15,14 @@ if (isset($_GET['pass'])) {
 }
 
 class Result
-{
-}
+{}
 $response = new Result();
 
 //echo "SELECT * FROM Clients WHERE email='$email' AND pass='$pass'";
 
 $resultado = $conn->query("SELECT * FROM Clients WHERE email='$email' AND pass='$pass'");
 
-if ($resultado = mysqli_fetch_array($resultado)) {
+if ($resultado = mysqli_fetch_object($resultado)) {
     $response->data = $resultado;
     $response->result = true;
 } else {

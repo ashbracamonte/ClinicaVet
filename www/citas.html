@@ -7,36 +7,34 @@
   <title>Formulario de Citas - Clínica Veterinaria</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      window.location.href = "/ClinicaVet/www/";
+    }
+  </script>
 </head>
 
 <body>
   <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="col-md-6 col-sm-8 col-xs-12 inicio-container text-center">
       <div class="profile-form text-center">
+
         <div class="inicio-header textopadding text-center">
           <h2>Formulario de Citas</h2>
         </div>
-        <form>
+
+        <form id="appoitment_form">
           <div class="form-group text-left">
             <select id="paciente" class="custom-select form-control">
               <option value="" disabled selected>Seleccione un paciente</option>
-              <option value="1">Zeus</option>
-              <option value="2">Minie</option>
               <!-- Agrega más opciones según sea necesario -->
             </select>
           </div>
-          <div class="form-group text-left">
-            <select id="veterinario" class="custom-select form-control">
-              <option value="" disabled selected>Seleccione un veterinario</option>
-              <option value="1">Veterinaria Rosy</option>
-              <option value="2">Veterinario Raul</option>
-              <!-- Agrega más opciones según sea necesario -->
-            </select>
-          </div>
-          <div class="form-group text-left">
-            <input type="datetime-local" id="fecha" class="form-control">
-          </div>
+
           <div class="form-group text-left">
             <select id="tipo_cita" class="custom-select form-control">
               <option value="" disabled selected>Seleccione el tipo de cita</option>
@@ -45,14 +43,28 @@
               <!-- Agrega más opciones según sea necesario -->
             </select>
           </div>
+
           <div class="form-group text-left">
-            <label for="notas" class="form-label">Notas</label>
-            <textarea id="notas" class="form-control" rows="3"></textarea>
+            <select id="veterinario" class="custom-select form-control">
+              <option value="" disabled selected>Seleccione un veterinario</option>
+              <!-- Agrega más opciones según sea necesario -->
+            </select>
           </div>
+
+          <div class="form-group text-left">
+            <input type="datetime-local" id="fecha" class="form-control">
+          </div>
+
+          <div class="form-group text-left">
+            <textarea id="notas" class="form-control" rows="3" placeholder="Notas"></textarea>
+          </div>
+
           <button type="submit" class="btn btn-primary btn-rounded btn-block">Guardar</button>
         </form>
+
         <div class="custom-margin-bottom"></div>
       </div>
+
       <nav class="navbar navbar-light bg-custom">
         <div class="container-fluid d-flex justify-content-around">
           <!-- Poner los links de las imágenes aquí -->
@@ -75,6 +87,176 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+
+    $(document).ready(function () {
+
+      //Limita la fecha a mañana y deshabilita la fecha
+      var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      var minDateTimeTomorrow = tomorrow.toISOString().substring(0, 16);
+      $('#fecha').attr('min', minDateTimeTomorrow);
+      $('#fecha').prop('disabled', true);
+
+      //Cuando inicia la pantalla, trae a todas las mascotas del usuario
+      $.ajax({
+        // la URL para la petición
+        url: 'http://localhost/ClinicaVet/www/php/getPets.php',
+
+        data: { data: JSON.stringify(user.id) },
+
+        // especifica si será una petición POST o GET
+        method: 'POST',
+
+        // el tipo de información que se espera de respuesta
+        dataType: 'json',
+
+        //comando de jquery para imprimer en HTML
+        success: function (response) {
+          if (response.result) {
+            response.pets.forEach(pet => {
+              $('#paciente').append(
+                `<option value="${pet.id}">${pet.namepet}</option>`
+              );
+            });
+          }
+        },
+
+        error: function (xhr, status) {
+          console.log(xhr.responseText);
+          alert('Disculpe, existió un problema');
+        }
+      })
+    });
+
+    //Cuando se hacce una selección diferente en el tipo de cita, trae a todos los veterinarios del tipo de cita seleccionado
+    $('#tipo_cita').change(function (id) {
+      $('#veterinario').val("");
+
+      let id_cita = id.target.value;
+
+      $.ajax({
+        // la URL para la petición
+        url: 'http://localhost/ClinicaVet/www/php/getVets.php',
+
+        data: { data: JSON.stringify(id_cita) },
+
+        // especifica si será una petición POST o GET
+        method: 'POST',
+
+        // el tipo de información que se espera de respuesta
+        dataType: 'json',
+
+        success: function (response) {
+
+          if (response.result) {
+            $('#veterinario').html("<option value='' disabled selected>Seleccione un veterinario</option>");
+            response.vets.forEach(vet => {
+              $('#veterinario').append(
+                `<option value="${vet.id}">Veterinario ${vet.name}</option>`
+              );
+            });
+          }
+        },
+
+        error: function (xhr, status) {
+          console.log(xhr.responseText);
+          alert('Disculpe, existió un problema');
+        }
+      });
+    });
+
+    //Checa que todos los campos antes de la fecha estén llenos
+    function checkFields() {
+      var paciente = $('#paciente').val();
+      var tipo_cita = $('#tipo_cita').val();
+      var veterinario = $('#veterinario').val();
+
+      if (paciente && tipo_cita && veterinario) {
+        $('#fecha').prop('disabled', false);
+      } else {
+        $('#fecha').prop('disabled', true);
+      }
+    }
+
+    // Verifica los campos cada vez que se cambia su valor
+    $('#paciente, #tipo_cita, #veterinario').change(checkFields);
+
+
+    //Cuando se hace una selección en la fecha, evita que haya un minuto diferente a xx:00
+    $('#fecha').change(function () {
+      var dateTime = $(this).val();
+      var selectedDate = new Date(dateTime);
+
+      var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+
+      var minDateTimeTomorrow = tomorrow.toISOString().substring(0,16);
+
+      if (selectedDate < tomorrow) {
+        $(this).val(minDateTimeTomorrow);
+      } else {
+        var formattedDateTime = dateTime.substring(0, dateTime.length - 3) + ":00";
+        $(this).val(formattedDateTime);
+      }
+    });
+
+    //Enviar los datos
+    $('#appoitment_form').submit(function (event) {
+      event.preventDefault();
+
+      // Obtiene los datos del formulario
+      let paciente = $('#paciente').val();
+      let tipo_cita = $('#tipo_cita').val();
+      let veterinario = $('#veterinario').val();
+      let fecha = $('#fecha').val();
+      let notas = $('#notas').val();
+
+      if(paciente == null || tipo_cita == null || veterinario == null || fecha == null){
+        alert("Debe llenar todos los campos");
+        return;
+      }
+
+      let data = {
+        id_paciente: paciente,
+        tipo_cita: tipo_cita,
+        id_veterinario: veterinario,
+        fecha: fecha,
+        notas: notas,
+        id_usuario: user.id,
+      }
+
+      // Convierte el objeto a una cadena JSON
+      var jsonData = JSON.stringify(data);
+
+      $.ajax({
+        // la URL para la petición
+        url: 'http://localhost/ClinicaVet/www/php/createAppointment.php',
+
+        data: { data: jsonData },
+
+        method: 'POST',
+
+        dataType: 'json',
+
+        success: function (response) {
+          console.log(response);
+          alert(response.msg);
+        },
+
+        error: function (xhr, status) {
+          console.log(xhr.responseText);
+          alert('Disculpe, existió un problema');
+        }
+    });
+
+
+  });
+
+
+  </script>
 </body>
 
 </html>

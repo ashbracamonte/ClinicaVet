@@ -111,8 +111,46 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         let input = $('input[type=file]');
+        // obtiene las mascotas del usuario
+        $(document).ready(
+            $.ajax({
+                // la URL para la petición
+                url: 'http://localhost/ClinicaVet/www/php/getPets.php',
 
-        // Escucha el evento change
+                data: { data: JSON.stringify(user.id) },
+
+                // especifica si será una petición POST o GET
+                method: 'POST',
+
+                // el tipo de información que se espera de respuesta
+                dataType: 'json',
+
+                //comando de jquery para imprimer en HTML
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.result) {
+                        response.pets.forEach(pet => {
+                            $('#petTableBody').append(
+                                `<tr>
+                                    <td><img src="data:image/png;base64,${pet.image}" alt="Imagen de la mascota" width="100"></td>
+                                    <td>${pet.namepet}</td>
+                                    <td>${pet.birth}</td>
+                                    <td>${pet.gender}</td>
+                                </tr>`
+                            );
+                        });
+                    }
+                },
+
+                error: function (xhr, status) {
+                    console.log(xhr.responseText);
+                    alert('Disculpe, existió un problema');
+                }
+            })
+        );
+
+        // Escucha el evento change para la image
         input.on('change', function () {
             let file = this.files[0];
             let reader = new FileReader();
@@ -129,9 +167,6 @@
                 // Muestra la previsualización de la imagen
                 $('#imgPreview').attr('src', reader.result);
 
-                // Aquí puedes añadir el código para subir la imagen
-                // Por ejemplo, podrías hacer una petición HTTP a un servidor
-
                 // Limpia el input
                 input.val(null);
             }
@@ -144,6 +179,7 @@
             }
         });
 
+        // Añade una mascota al usuario
         document.getElementById("petForm").addEventListener("submit", function (event) {
             event.preventDefault();
             let nombre = $("#petName").val();

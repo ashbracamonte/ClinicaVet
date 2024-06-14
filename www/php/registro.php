@@ -15,7 +15,16 @@ if(isset($_POST['data'])){
         $response->msg = "Ese correo ya está registrado";
     }else{
         $resultado = $conn->query("INSERT INTO clients (name, email, pass, lastname, phone) VALUES('$user->name', '$user->mail', '$user->pass', '$user->lastname', $user->phone)");
-        $response->result = $user;
+        // Obtén el ID del último registro insertado
+        $last_id = mysqli_insert_id($conn);
+
+        // Realiza una consulta para obtener la fila completa
+        $result = $conn->query("SELECT * FROM clients WHERE id = $last_id");
+
+        // Obtiene la fila como un objeto
+        $row = mysqli_fetch_object($result);
+
+        $response->result = $row;
         $response->msg = "Registro exitoso";
     }
 
